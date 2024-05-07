@@ -1,17 +1,29 @@
-LIB_BLAS  = -lblas -lpthread -lm
-LDLIBS   += $(LIB_BLAS)
-INCLUDES += -I/usr/include/openblas
-C++FLAGS += $(INCLUDES)
+ifeq ($(USER),raj)
+  GENCODE_SM75  : -arch=sm_50 \ 
+-gencode=arch=compute_50,code=sm_50 \ 
+-gencode=arch=compute_52,code=sm_52 \ 
+-gencode=arch=compute_60,code=sm_60 \ 
+-gencode=arch=compute_61,code=sm_61 \ 
+-gencode=arch=compute_70,code=sm_70 \ 
+-gencode=arch=compute_75,code=sm_75 \
+-gencode=arch=compute_75,code=compute_75
 
-CUDA_INSTALL_PATH=/usr/local/cuda-11.6
+  CUDA_INSTALL_PATH=/opt/cuda
+  LIB_BLAS  = -lcblas -lpthread -lm
+endif
 
-GENCODE_SM75  :=-gencode arch=compute_75,code=sm_75
-# GENCODE_SM75  :=-gencode arch=compute_75,code=compute_75
+ifeq ($(USER),ubuntu)
+  GENCODE_SM75  :=-gencode arch=compute_75,code=sm_75
+  CUDA_INSTALL_PATH=/usr/local/cuda-11.6
+  LIB_BLAS  = -lblas -lpthread -lm
+  C++FLAGS += -DAWS
+endif
+
 
 GENCODE_FLAGS :=$(GENCODE_SM75)
 PTXFLAGS=-v
 # PTXFLAGS=-dlcm=ca 
-NVCCFLAGS= -O3 $(GENCODE_FLAGS) -c
+NVCCFLAGS= -O3 $(GENCODE_FLAGS) -c 
 
 # Compilers
 NVCC            = $(shell which nvcc)
@@ -31,5 +43,4 @@ CLINK           = $(CC)
 
 .cu.o:
 	$(NVCC)  $(NVCCFLAGS) $<
-
 
