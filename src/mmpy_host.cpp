@@ -1,5 +1,9 @@
 #include "types.h"
-#include "cblas.h"
+#ifndef AWS 
+ #include "cblas.h" 
+#else
+ #include <cblas.h> 
+#endif
 
 void matMulHost(_FTYPE_ *C, const _FTYPE_ *A, const _FTYPE_ *B, unsigned int M, unsigned int N)
 {
