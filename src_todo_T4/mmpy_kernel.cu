@@ -37,23 +37,42 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
   int I = by * TILEDIM_K + ty;
   int J = bx * TILEDIM_K + tx;
 
-  double Cij = 0;
+  double Cij[2] = {0, 0};
   for (int kk = 0; kk < (N / TILEDIM_M + (N % TILEDIM_M != 0)); kk++) {
     if (I < N && kk * TILEDIM_M + tx < N)
       As[ty][tx] = A[I * N + kk * TILEDIM_M + tx];
     else
       As[ty][tx] = 0;
+
+    if ((I + TILEDIM_N / TILESCALE_N) < N && kk * TILEDIM_M + tx < N)
+      As[ty + TILEDIM_N / TILESCALE_N][tx] =
+          A[(I + TILEDIM_N / TILESCALE_N) * N + kk * TILEDIM_M + tx];
+    else
+      As[ty + TILEDIM_N / TILESCALE_N][tx] = 0;
+
     if (kk * TILEDIM_M + ty < N && J < N)
       Bs[ty][tx] = B[(kk * TILEDIM_M + ty) * N + J];
     else
       Bs[ty][tx] = 0;
 
+    if (kk * TILEDIM_M + ty + TILEDIM_N / TILESCALE_N < N && J < N)
+      Bs[ty + TILEDIM_N / TILESCALE_N][tx] =
+          B[(kk * TILEDIM_M + ty + TILEDIM_N / TILESCALE_N) * N + J];
+    else
+      Bs[ty + TILEDIM_N / TILESCALE_N][tx] = 0;
+
     __syncthreads();
-    for (int k = 0; k < TILEDIM_K; k++)
-      Cij += As[ty][k] * Bs[k][tx];
+#pragma unroll
+    for (int k = 0; k < TILEDIM_K; k++) {
+      Cij[0] += As[ty][k] * Bs[k][tx];
+      Cij[1] += As[ty + TILEDIM_N / TILESCALE_N][k] * Bs[k][tx];
+    }
     __syncthreads();
-    if (I < N && J < N)
-      C[I * N + J] = Cij;
   }
+
+  if (I < N && J < N)
+    C[I * N + J] = Cij[0];
+  if (I + TILEDIM_N / TILESCALE_N < N && J < N)
+    C[(I + TILEDIM_N / TILESCALE_N) * N + J] = Cij[1];
 }
 #endif

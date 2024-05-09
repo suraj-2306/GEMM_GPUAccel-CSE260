@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
   _nty = BLOCKDIM_Y;
 #endif
 
-  dim3 threads(_ntx, _nty, 1);
+  dim3 threads(_ntx / TILESCALE_M, _nty / TILESCALE_N, 1);
   int numblocksX = n / _ntx;
   int numblocksY = n / _nty;
 
