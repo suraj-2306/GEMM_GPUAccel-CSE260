@@ -3,10 +3,10 @@
 
 // tilescale (# of points computed by each thread)
 #ifndef TILESCALE_M
-#define TILESCALE_M 1 // Enter your own values
+#define TILESCALE_M 2 // Enter your own values
 #endif
 #ifndef TILESCALE_N
-#define TILESCALE_N 4 // Enter your own values
+#define TILESCALE_N 2 // Enter your own values
 #endif
 #ifndef TILESCALE_K
 #define TILESCALE_K 1 // Enter your own values
