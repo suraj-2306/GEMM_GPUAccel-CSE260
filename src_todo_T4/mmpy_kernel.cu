@@ -40,12 +40,10 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
   int startI = by * TILEDIM_K;
   int startJ = bx * TILEDIM_K;
 
-  double Cij[TILESCALE_N][TILESCALE_M];
+  double Cij[TILESCALE_N * TILESCALE_M];
 #pragma unroll
-  for (int ci = 0; ci < TILESCALE_M; ++ci)
-#pragma unroll
-    for (int cj = 0; cj < TILESCALE_N; ++cj)
-      Cij[cj][ci] = 0;
+  for (int cij = 0; cij < TILESCALE_M * TILESCALE_N; ++cij)
+    Cij[cij] = 0;
 
   for (int kk = 0; kk < (N / TILEDIM_M + (N % TILEDIM_M != 0)); kk++) {
 
@@ -83,7 +81,8 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
         for (int cj = 0; cj < TILESCALE_N; ++cj) {
           int tyn = ty + cj * TILEDIM_N / TILESCALE_N;
           int txn = tx + ci * TILEDIM_M / TILESCALE_M;
-          Cij[cj][ci] += As[tyn * TILEDIM_M + k] * Bs[k * TILEDIM_N + txn];
+          Cij[cj * TILESCALE_M + ci] +=
+              As[tyn * TILEDIM_M + k] * Bs[k * TILEDIM_N + txn];
         }
       }
     }
@@ -99,7 +98,7 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
       int I = startI + tyn;
       int J = startJ + txn;
       if (I < N && J < N)
-        C[I * N + J] = Cij[cj][ci];
+        C[I * N + J] = Cij[cj * TILESCALE_M + ci];
     }
   }
 }
