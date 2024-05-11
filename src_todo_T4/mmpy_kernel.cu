@@ -29,10 +29,10 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
 #else
 // You should be changing the kernel here for the non naive implementation.
 __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
-  extern __shared__ double As_Bs[];
+  extern __shared__ _FTYPE_ As_Bs[];
 
-  double *As = (double *)As_Bs;
-  double *Bs = (double *)As_Bs + TILEDIM_M * TILEDIM_K;
+  _FTYPE_ *As = (_FTYPE_ *)As_Bs;
+  _FTYPE_ *Bs = (_FTYPE_ *)As_Bs + TILEDIM_M * TILEDIM_K;
 
   int ty = threadIdx.y, tx = threadIdx.x;
   int by = blockIdx.y, bx = blockIdx.x;
@@ -40,7 +40,7 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
   int startI = by * TILEDIM_K;
   int startJ = bx * TILEDIM_K;
 
-  double Cij[TILESCALE_N * TILESCALE_M];
+  _FTYPE_ Cij[TILESCALE_N * TILESCALE_M];
 #pragma unroll
   for (int cij = 0; cij < TILESCALE_M * TILESCALE_N; ++cij)
     Cij[cij] = 0;
