@@ -23,7 +23,7 @@ endif
 GENCODE_FLAGS :=$(GENCODE_SM75)
 PTXFLAGS=-v
 # PTXFLAGS=-dlcm=ca 
-NVCCFLAGS= -O3 $(GENCODE_FLAGS) -c 
+NVCCFLAGS= -O3 $(GENCODE_FLAGS) -c  -lineinfo
 
 # Compilers
 NVCC            = $(shell which nvcc)
