@@ -75,7 +75,7 @@ ifeq ($(cuda_timer), 1)
 endif
 
 # Uncomment if you want to report resource requirements (registers etc)
-# NVCCFLAGS += --ptxas-options=-v -rdc=true
+NVCCFLAGS += --ptxas-options=-v -rdc=true
 # NVCCFLAGS += --opencc-options -LIST:source=on
 
 # You can set the thread block geometry by specifying bx= and by= on
