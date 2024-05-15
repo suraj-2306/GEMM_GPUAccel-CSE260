@@ -41,11 +41,10 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
   // int startJ = bx * TILEDIM_K;
 
   _FTYPE_ Cij[TILESCALE_N * TILESCALE_M] = {0.0f};
-  // #pragma unroll
-  // for (int cij = 0; cij < TILESCALE_M * TILESCALE_N; ++cij)
-  // Cij[cij] = 0;
+
   const int tid = tx + ty * blockDim.x;
 
+  #pragma unroll
   for (int kk = 0; kk < (N / TILEDIM_K + (N % TILEDIM_K != 0)); kk++) {
 
     if ((tid / TILEDIM_K < N) && (tid % TILEDIM_K + kk * TILEDIM_K) < N)
@@ -62,42 +61,19 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
     else
       Bs[(tid / TILEDIM_N) * TILEDIM_N + tid % TILEDIM_N] = 0;
 
-    // Thread Block
-    // #pragma unroll
-    //     for (int ci = 0; ci < TILESCALE_M; ++ci) {
-    // #pragma unroll
-    //       for (int cj = 0; cj < TILESCALE_N; ++cj) {
-    //         int tyn = ty + cj * TILEDIM_N / TILESCALE_N;
-    //         int txn = tx + ci * TILEDIM_M / TILESCALE_M;
-    //         int I = startI + tyn;
-    //         int J = startJ + txn;
-
-    //         if (I < N && kk * TILEDIM_M + txn < N)
-    //           As[tyn * TILEDIM_M + txn] = A[I * N + kk * TILEDIM_M + txn];
-    //         else
-    //           As[tyn * TILEDIM_M + txn] = 0;
-
-    //         if (kk * TILEDIM_M + tyn < N && J < N)
-    //           Bs[tyn * TILEDIM_N + txn] = B[(kk * TILEDIM_M + tyn) * N + J];
-    //         else
-    //           Bs[tyn * TILEDIM_N + txn] = 0;
-    //       }
-    //     }
     __syncthreads();
     // Warp Tile
 
     // Thread Tile
-    // #pragma unroll
+#pragma unroll
     for (int k = 0; k < TILEDIM_K; k++) {
-      // #pragma unroll
+#pragma unroll
       for (int ci = 0; ci < TILESCALE_M; ++ci) {
-        // #pragma unroll
+        _FTYPE_ bscopy = Bs[(k)*TILEDIM_N + tx * TILESCALE_M + ci];
+#pragma unroll
         for (int cj = 0; cj < TILESCALE_N; ++cj) {
-          //           int tyn = ty + cj * TILEDIM_N / TILESCALE_N;
-          //           int txn = tx + ci * TILEDIM_M / TILESCALE_M;
           Cij[cj * TILESCALE_M + ci] +=
-              As[(ty * TILESCALE_N + cj) * TILEDIM_K + k] *
-              Bs[(k)*TILEDIM_N + tx * TILESCALE_M + ci];
+              As[(ty * TILESCALE_N + cj) * TILEDIM_K + k] * bscopy;
           // if (tx == 0 & ty == 0)
           //   printf("A %f idx=%d,B %f idx=%d \n",
           //          A[(ty * TILESCALE_N + cj) * TILEDIM_K + k],
@@ -120,11 +96,6 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
   for (int ci = 0; ci < TILESCALE_M; ++ci) {
 #pragma unroll
     for (int cj = 0; cj < TILESCALE_N; ++cj) {
-      // int tyn = ty + cj * TILEDIM_N / TILESCALE_N;
-      // int txn = tx + ci * TILEDIM_M / TILESCALE_M;
-      // int I = startI + tyn;
-      // int J = startJ + txn;
-      // if (I < N && J < N)
       if ((TILESCALE_M * ty + cj + by * TILEDIM_N) < N &&
           (ci + tx * TILESCALE_M + bx * TILEDIM_M) < N)
         C[(TILESCALE_M * ty + cj + by * TILEDIM_N) * N + ci + tx * TILESCALE_M +
