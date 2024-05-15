@@ -1,0 +1,21 @@
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 256 -r 100000 > results/bx32_n256.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 257 -r 100000 > results/bx32_n257.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 400 -r 80000 > results/bx32_n400.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 511 -r 50000 > results/bx32_n511.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 512 -r 50000 > results/bx32_n512.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 513 -r 50000 > results/bx32_n513.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 768 -r 20000 > results/bx32_n768.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 800 -r 20000 > results/bx32_n800.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 1023 -r 10000 > results/bx32_n1023.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 1024 -r 10000 > results/bx32_n1024.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 1025 -r 10000 > results/bx32_n1025.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 1500 -r 5000 > results/bx32_n1500.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 2047 -r 1000 > results/bx32_n2047.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 2048 -r 1000 > results/bx32_n2048.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 2049 -r 1000 > results/bx32_n2049.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 2500 -r 800 > results/bx32_n2500.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 3000 -r 600 > results/bx32_n3000.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 3500 -r 400 > results/bx32_n3500.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 4095 -r 100 > results/bx32_n4095.log
+./mmpy `cat src_todo_T4/OPTIONS_RUNTIME.txt` -n 4096 -r 100 > results/bx32_n4096.log
+grep 'computation' results/* | sed 's\.*bx\\g' | sed 's\_n\,\g' | sed 's\.log.*sec. .\,\g' | sed 's\gflops.*\\g' > results/results.csv

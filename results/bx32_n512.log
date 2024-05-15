@@ -1,0 +1,29 @@
+# devices: 1
+
+Device is a Tesla T4, capability: 7.5
+Clock speed: 1590.000000 MHz
+# cores: 40
+
+Global memory: 14.560913GB
+Memory Clock Rate (MHz): 5001.000000
+Memory Bus Width (bits): 256
+Peak Memory Bandwidth (GB/s): 320.064000
+L2 Cache size: (KB): 4096.000000
+ECC Enabled
+Device shares a unified address space with the host
+CUDA Driver version: 11060, runtime version: 10010
+
+ capability 7.5
+n: 512, tx: 32, ty: 32, gridX: 4, gridY: 4, reps: 50000, epsilon: 0.000183105
+
+Using Single precision arithmetic
+
+
+Device computation time: 7.312977 sec. [1835.336370 gflops]
+
+     N     TX     TY   Reps       t_h     GF_h       t_d   GF_d   Host?  L1? Rnd?  BT?  SHM
+@   512    32     32    50000   0.00e+00     0.0  7.31e+00 1835.3     N    N    N    N    4
+
+
+Device result: answers matched to within 0.000183105
+
