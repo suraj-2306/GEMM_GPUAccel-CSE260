@@ -19,3 +19,11 @@ n: 2500, tx: 32, ty: 32, gridX: 20, gridY: 20, reps: 800, epsilon: 0.00089407
 Using Single precision arithmetic
 
 
+Device computation time: 8.049131 sec. [3105.925380 gflops]
+
+     N     TX     TY   Reps       t_h     GF_h       t_d   GF_d   Host?  L1? Rnd?  BT?  SHM
+@  2500    32     32    800   0.00e+00     0.0  8.05e+00 3105.9     N    N    N    N    4
+
+
+Device result: answers matched to within 0.00089407
+

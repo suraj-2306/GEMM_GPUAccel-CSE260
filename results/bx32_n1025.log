@@ -19,10 +19,10 @@ n: 1025, tx: 32, ty: 32, gridX: 9, gridY: 9, reps: 10000, epsilon: 0.000366569
 Using Single precision arithmetic
 
 
-Device computation time: 10.829209 sec. [1988.862928 gflops]
+Device computation time: 10.394036 sec. [2072.131787 gflops]
 
      N     TX     TY   Reps       t_h     GF_h       t_d   GF_d   Host?  L1? Rnd?  BT?  SHM
-@  1025    32     32    10000   0.00e+00     0.0  1.08e+01 1988.9     N    N    N    N    4
+@  1025    32     32    10000   0.00e+00     0.0  1.04e+01 2072.1     N    N    N    N    4
 
 
 Device result: answers matched to within 0.000366569

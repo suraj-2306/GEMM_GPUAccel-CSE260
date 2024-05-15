@@ -19,10 +19,10 @@ n: 768, tx: 32, ty: 32, gridX: 6, gridY: 6, reps: 20000, epsilon: 0.000274658
 Using Single precision arithmetic
 
 
-Device computation time: 6.101712 sec. [2969.558923 gflops]
+Device computation time: 6.102561 sec. [2969.145788 gflops]
 
      N     TX     TY   Reps       t_h     GF_h       t_d   GF_d   Host?  L1? Rnd?  BT?  SHM
-@   768    32     32    20000   0.00e+00     0.0  6.10e+00 2969.6     N    N    N    N    4
+@   768    32     32    20000   0.00e+00     0.0  6.10e+00 2969.1     N    N    N    N    4
 
 
 Device result: answers matched to within 0.000274658
