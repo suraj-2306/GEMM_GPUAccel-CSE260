@@ -75,7 +75,7 @@ ifeq ($(cuda_timer), 1)
 endif
 
 # Uncomment if you want to report resource requirements (registers etc)
-NVCCFLAGS += --ptxas-options=-v -rdc=true
+NVCCFLAGS += --ptxas-options=-v
 # NVCCFLAGS += --opencc-options -LIST:source=on
 
 # You can set the thread block geometry by specifying bx= and by= on
@@ -136,7 +136,7 @@ all:
 	$(C++) $(C++FLAGS) -c ../src/Report.cpp -o ../src/Report.o
 	$(NVCC) $(NVCCFLAGS) -c ../src_todo_T4/setGrid.cu -o ../src_todo_T4/setGrid.o
 	$(NVCC) $(NVCCFLAGS) -c ../src_todo_T4/mmpy_kernel.cu -o ../src_todo_T4/mmpy_kernel.o
-	$(NVCC) -o ../$(APP) $(LDFLAGS) $(OBJECTS)  $(LDLIBS) -lcublas -lcblas 
+	$(NVCC) -o ../$(APP) $(LDFLAGS) $(OBJECTS)  $(LDLIBS) -lcublas
 
 clean:
 	rm -rf ../src/*.o ../src_todo_T4/*.o ../$(APP)
