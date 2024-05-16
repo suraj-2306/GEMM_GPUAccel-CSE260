@@ -47,21 +47,27 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
 #pragma unroll
   for (int kk = 0; kk < (N / TILEDIM_K + (N % TILEDIM_K != 0)); kk++) {
 
-    if ((tid / TILEDIM_K + by * TILEDIM_N) < N &&
-        (tid % TILEDIM_K + kk * TILEDIM_K) < N)
-      As[(tid / TILEDIM_K) * TILEDIM_K + tid % TILEDIM_K] =
-          A[(by * TILEDIM_N + tid / TILEDIM_K) * N + tid % TILEDIM_K +
-            kk * TILEDIM_K];
-    else
-      As[(tid / TILEDIM_K) * TILEDIM_K + tid % TILEDIM_K] = 0;
+    for (int tij = 0; tij < TLOAD; tij++) {
+      if (((tid * TLOAD + tij) / TILEDIM_K + by * TILEDIM_N) < N &&
+          ((tid * TLOAD + tij) % TILEDIM_K + kk * TILEDIM_K) < N)
+        As[((tid * TLOAD + tij) / TILEDIM_K) * TILEDIM_K +
+           (tid * TLOAD + tij) % TILEDIM_K] =
+            A[(by * TILEDIM_N + (tid * TLOAD + tij) / TILEDIM_K) * N +
+              (tid * TLOAD + tij) % TILEDIM_K + kk * TILEDIM_K];
+      else
+        As[((tid * TLOAD + tij) / TILEDIM_K) * TILEDIM_K +
+           (tid * TLOAD + tij) % TILEDIM_K] = 0;
 
-    if ((tid / TILEDIM_N + kk * TILEDIM_K) < N &&
-        (tid % TILEDIM_N + bx * TILEDIM_M) < N)
-      Bs[(tid / TILEDIM_N) * TILEDIM_N + tid % TILEDIM_N] =
-          B[(tid / TILEDIM_N + kk * TILEDIM_K) * N + tid % TILEDIM_N +
-            bx * TILEDIM_M];
-    else
-      Bs[(tid / TILEDIM_N) * TILEDIM_N + tid % TILEDIM_N] = 0;
+      if (((tid * TLOAD + tij) / TILEDIM_N + kk * TILEDIM_K) < N &&
+          ((tid * TLOAD + tij) % TILEDIM_N + bx * TILEDIM_M) < N)
+        Bs[((tid * TLOAD + tij) / TILEDIM_N) * TILEDIM_N +
+           (tid * TLOAD + tij) % TILEDIM_N] =
+            B[((tid * TLOAD + tij) / TILEDIM_N + kk * TILEDIM_K) * N +
+              (tid * TLOAD + tij) % TILEDIM_N + bx * TILEDIM_M];
+      else
+        Bs[((tid * TLOAD + tij) / TILEDIM_N) * TILEDIM_N +
+           (tid * TLOAD + tij) % TILEDIM_N] = 0;
+    }
 
     __syncthreads();
     // Warp Tile
