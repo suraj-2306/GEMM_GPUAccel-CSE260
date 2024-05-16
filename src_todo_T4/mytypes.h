@@ -19,7 +19,7 @@
 // with warps along the horiziontal axis (K)
 // so to get good coalescaed loads, we want TILEDIM_K to be >= 32
 //
-#define TILEDIM_K 1 // Enter your own values
+#define TILEDIM_K 8 // Enter your own values
 //
 #define TLOAD 1 // Enter your own values
 
