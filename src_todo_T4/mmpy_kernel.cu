@@ -1,5 +1,6 @@
 // ;-*- mode: c;-*-
 // Matrix multiply device code
+
 #include "../src/types.h"
 #include "../src/utils.h"
 #include "mytypes.h"
