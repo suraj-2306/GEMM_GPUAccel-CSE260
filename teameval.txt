@@ -22,20 +22,26 @@ B: Suraj Sathya Prakash
 (2) Estimate how much time each team member devoted to this project, in HOURS.
 
   	                        A 	       B
-meetings 	  	  	 
-coding 	  	  	 
-writeup 	  	  	 
-planning (alone) 	  	  	 
-total (including meetings) 	  	  	 
+meetings 	  	  	         10         10
+coding 	  	  	           25         30
+writeup 	  	  	         5          5 
+planning (alone) 	  	  	 10         10
+total (including meetings) 50         55	 
 
 
 (3) Describe 
   (a) what the major responsibilities of each team member were;
+  Suraj implemented the partial CUTLASS implementation. Krish handled the 2D tiling analysis. We then merged our methodologies to finalize the implementation.
   (b) whether or not you completed the assignment;
+  We did manage to complete the assignment on the due date
   (c) the major strengths and weaknesses in your team, e.g. how
       your team worked together;
+  We had good discussions, during which we went through the reference codebase and understood the intricracies of the methodology implemented
   (d) the lessons learned from these events;
+  We learned that matrix multiplication on GPU has a massive speedup compared to pa1. The roofline model also gave us a good picture to estimate how our kernels should be written
   (e) whether and how you plan to change the way your work together and
+  We are happy with the way we worked and we believe that it was a fruitful process.
   (f) anything else that comes to mind.
+  It was a great exposure to CUDA. We thoroughly enjoyed the process.
 
 
