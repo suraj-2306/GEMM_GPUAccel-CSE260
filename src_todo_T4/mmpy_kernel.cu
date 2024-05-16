@@ -39,10 +39,10 @@ __global__ void matMul(int N, _FTYPE_ *C, _FTYPE_ *A, _FTYPE_ *B) {
 
   // int startI = by * TILEDIM_K;
   // int startJ = bx * TILEDIM_K;
-
-  _FTYPE_ Cij[TILESCALE_N * TILESCALE_M] = {0.0f};
+_FTYPE_ Cij[TILESCALE_N * TILESCALE_M] = {0.0f};
 
   const int tid = tx + ty * blockDim.x;
+  const int TLOAD = TILEDIM_N * TILEDIM_K / (blockDim.x * blockDim.x);
 
 #pragma unroll
   for (int kk = 0; kk < (N / TILEDIM_K + (N % TILEDIM_K != 0)); kk++) {

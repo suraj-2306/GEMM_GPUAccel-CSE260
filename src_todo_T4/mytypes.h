@@ -21,8 +21,6 @@
 //
 #define TILEDIM_K 32 // Enter your own values
 
-#define TLOAD 4 // Enter your own values
-
 // step size in each dimension
 #define TILESTEP_N 1 // Enter your own values
 #define TILESTEP_K 1 // Enter your own values
